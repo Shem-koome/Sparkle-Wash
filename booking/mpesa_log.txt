@@ -1,0 +1,4 @@
+[2024-07-22 11:06:34] Received phoneNumber: 254742542230, totalPrice: 1
+[2024-07-22 11:06:34] Using credentials: consumerKey=Ee9S1AVHrHGUEd4gGyXd7SpuyAFhwdpETS4E7YlGMhHAM4gw, consumerSecret=Tgp9O5jjSwga1J525kbBm2GAfMMwpOLpw8GE9phiM8JF3bwUElZNsBz1xrAAR7GP, shortcode=8839928, passkey=bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919
+[2024-07-22 11:06:35] Obtained access token: U8gWxwfs6QUfhecSnqM2A0SCBGu2
+[2024-07-22 11:06:36] STK push response: {"requestId":"2654-4b64-97ff-b827b542881d212743","errorCode":"500.001.1001","errorMessage":"Merchant does not exist"}

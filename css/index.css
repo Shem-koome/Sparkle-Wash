@@ -1,0 +1,232 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500&display=swap");
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background-color: rgba(255, 255, 255, 0.918);
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+/*** Spinner ***/
+#spinner {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .5s ease-out, visibility 0s linear .5s;
+    z-index: 99999;
+}
+
+#spinner.show {
+    transition: opacity .5s ease-out, visibility 0s linear 0s;
+    visibility: visible;
+    opacity: 1;
+}
+
+/* General form styling */
+form {
+    max-width: 500px;
+    width: 100%;
+    padding: 18px;
+    background: #f9f9f9;
+    border: 1px solid rebeccapurple;
+    border-radius: 25px;
+    box-shadow: 0 0px 6px rgb(48, 1, 255);
+    transition: background-color 0.5s, color 0.5s; /* Smooth transition effect */
+}
+
+
+
+/* Style for the input-prepend class */
+.input-prepend {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+/* Style for the add-on span */
+.add-on {
+    background: #eee;
+    border: 1px solid blue;
+    border-right: none;
+    padding: 0 10px;
+    border-radius: 4px 0 0 4px;
+    display: flex;
+    align-items: center;
+}
+
+/* Icon inside the add-on span */
+.add-on i {
+    font-size: 20px;
+    color: #555;
+}
+
+/* Style for the input fields */
+input.span2 {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 0 15px 15px 0;
+    border-left: none;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+/* Focus state for the input fields */
+input.span2:focus {
+    border-color: #007bff;
+}
+
+h1 {
+    color: black;
+    text-align: center;
+}
+
+button {
+    background-color: #04aa6d;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+    transition: background-color 0.5s, color 0.5s; /* Smooth transition effect */
+}
+
+/* Hover effect */
+button:hover {
+    background-color: #0056b3; /* Darker background color on hover */
+    color: #fff; /* Change text color on hover */
+}
+
+/* The message box is shown when the user clicks on the password field */
+#message {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 50%;
+    left: 70%;
+    transform: translateY(-50%);
+    padding: 15px;
+    background-color: #f1f1f1;
+    border: 1px solid rebeccapurple;
+    border-radius: 10px;
+    box-shadow: 0 0px 6px rgb(48, 1, 255);
+    width: 300px; /* Default width for desktop */
+    z-index: 1000;
+}
+
+/* Media query for mobile devices */
+@media only screen and (max-width: 600px) {
+    #message {
+        left: 50%; /* Center horizontally on mobile */
+        transform: translateX(-50%); /* Center horizontally */
+        width: 90%; /* Adjust width for mobile */
+        max-width: 300px; /* Set maximum width */
+    }
+}
+
+
+#message p {
+    padding: 10px 20px; /* Adjusted padding */
+    font-size: 18px;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+    color: green;
+}
+
+.valid:before {
+    position: relative;
+    left: -20px; /* Adjusted left position */
+    content: "✔";
+}
+
+/* Add a red text color and an "x" icon when the requirements are wrong */
+.invalid {
+    color: red;
+}
+
+.invalid:before {
+    position: relative;
+    left: -20px; /* Adjusted left position */
+    content: "✖";
+}
+
+.toggle-password {
+    cursor: pointer;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Responsive Styling */
+@media only screen and (max-width: 768px) {
+  
+    #message p {
+        padding: 10px 15px; /* Adjusted padding for mobile */
+    }
+  
+    .valid:before,
+    .invalid:before {
+        left: -15px; /* Adjusted left position for mobile */
+    }
+}
+
+/* Tablet styles */
+@media (min-width: 600px) {
+    body {
+        font-size: 16px;
+        padding: 20px;
+    }
+
+    form {
+        transform: translateY(30px);
+    }
+}
+
+/* Desktop styles */
+@media (min-width: 1000px) {
+    body {
+        font-size: 18px;
+        padding: 30px;
+    }
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    body {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    form {
+        padding: 15px;
+        width: 100%;
+        box-shadow: none;
+    }
+
+    .add-on {
+        padding: 0 8px;
+    }
+
+    input.span2 {
+        padding: 8px;
+    }
+
+    button {
+        padding: 12px 16px;
+    }
+
+    #message p {
+        font-size: 16px;
+        padding: 8px 20px;
+    }
+}

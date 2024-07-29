@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sparkle Wash</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('https://websitedemos.net/car-wash-02/wp-content/uploads/sites/345/2020/01/cw-hero.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(5, 2, 131, 0.5); /* Light blue with 50% opacity */
+            z-index: 1;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 2;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #fff;
+            margin: 0 0 10px;
+        }
+
+        h1 {
+            font-size: 5em;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 0 solid rgb(255, 255, 255); /* white border */
+            animation: typing 3s steps(30, end), sparkle 5s infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+            }
+            50% {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+            }
+        }
+h3{
+    position: absolute;
+    font-size: 5em;
+    color: whitesmoke;
+    bottom: 10%;
+    z-index: 3;
+}
+        .btn {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+        }
+
+        .btn button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: rgb(22, 192, 204);
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        .btn button:hover {
+            background-color: blue;
+        }
+
+        @media screen and (max-width: 768px) {
+            h1 {
+                font-size: 3.5em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            h2 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to</h2>
+        <h1 id="sparkle-text"><b>Sparkle Wash</b></h1>
+    </div>
+
+    <h3>
+        A Clean Car Is A Happy Car!!
+    </h3>
+
+    <div class="btn">
+        <button onclick="window.location.href = '../Sparkle Wash/auth/login.php';">Sign In</button>
+        <button onclick="window.location.href = '../Sparkle Wash/auth/create.php';">Sign Up</button>
+    </div>
+
+    <script>
+        setInterval(function() {
+            const textElement = document.getElementById('sparkle-text');
+            textElement.style.animation = 'none';
+            void textElement.offsetWidth; // Trigger reflow
+            textElement.style.animation = null;
+        }, 5000); // Restart the animation every 5 seconds
+
+        
+    </script>
+</body>
+</html>

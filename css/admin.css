@@ -1,0 +1,498 @@
+/* General styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.9);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.header h1 {
+    font-size: 46px; /* Adjusted font size */
+    color: #ff0080;
+    margin: 0;
+    font-weight: bold;
+    left: 10px;
+}
+
+.header #sidebarToggle {
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    transition: 0.8s;
+}
+
+.header #sidebarToggle:hover {
+    color: blue;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 190px;
+    position: fixed;
+    top: 90px;
+    background-color: #f8f9fa;
+    padding-top: 20px;
+    box-shadow: 2px 0 30px rgba(0, 0, 0, 0.9);
+    transition: width 0.4s, left 0.4s;
+    overflow-x: hidden;
+  
+}
+
+.sidebar.collapsed {
+    width: 80px;
+}
+
+.sidebar a {
+    padding: 15px 18px;
+    text-decoration: none;
+    font-size: 18px; /* Adjusted font size */
+    color: #333;
+    display: flex;
+    align-items: center;
+    transition: padding 0.3s, width 0.3s;
+    transition: 0.8s;
+}
+
+.sidebar a:hover {
+    background-color: blue;
+    color: white;
+    border-radius: 30px;
+}
+
+.sidebar a .fas {
+    margin-right: 20px;
+    transition: margin-right 0.3s;
+}
+
+.sidebar.collapsed a {
+    padding: 15px;
+}
+
+.sidebar.collapsed a .fas {
+    margin-right: 0;
+    padding: 10px;
+}
+
+.sidebar a .sidebar-text {
+    display: inline;
+    transition: opacity 0.3s;
+}
+
+.sidebar.collapsed a .sidebar-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: #000;
+    text-decoration: none;
+}
+
+.nav-link.active {
+    background-color: #007bff; /* Highlight color */
+    color: #fff;
+}
+
+.nav-link .sidebar-text {
+    margin-left: 10px;
+    transition: opacity 0.3s;
+}
+.content {
+    margin-left: 260px;
+    padding: 10px;
+    transition: margin-left 0.3s;
+    padding-top: 130px;
+}
+
+.content.collapsed {
+    margin-left: 90px;
+}
+
+.options {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.options a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 5px 0;
+    transition: 0.8s;
+}
+
+.options a:hover {
+    background-color: blue;
+    color: white;
+    border-radius: 0 20px 20px 0;
+}
+.container {
+    text-align: center;
+}
+h2 {
+    font-size: 24px;
+    color: #000;
+}
+p{
+    color: #000;
+}
+
+.btn-danger {
+    /* Your custom styles for btn-danger */
+    color: #fff; /* White text color */
+    background-color: #dc3545; /* Red background color */
+    border-color: #dc3545; /* Red border color */
+    padding: 0.375rem 0.75rem; /* Padding for the button */
+    font-size: 1rem; /* Font size */
+    line-height: 1.5; /* Line height */
+    border-radius: 0.25rem; /* Border radius */
+    cursor: pointer; /* Show pointer on hover */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Darker red on hover */
+    border-color: #bd2130; /* Darker border color on hover */
+}
+
+/* Optional: Margin top for the Remove button */
+.mt-2 {
+    margin-top: 0.5rem; /* Adjust as needed */
+}
+
+.alert {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 2000;
+    width: 200px;
+    height: 100px;
+    padding: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.9);
+    color: white;
+}
+
+.alert-warning {
+    background-color: rgba(255, 193, 7, 0.9);
+    color: black;
+}
+
+.alert-info {
+    background-color: rgba(7, 69, 255, 0.9);
+    color: rgb(255, 255, 255);
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.9);
+    color: white;
+}
+
+.alert .btn-close {
+    color: inherit;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px;
+}
+
+.fade {
+    animation-duration: 0.5s;
+}
+
+.alert-dismissible.fade.show {
+    animation-name: slideDown;
+}
+
+.alert-dismissible.fade {
+    animation-name: slideUp;
+}
+
+/* Media query for responsive layout */
+@media (max-width: 560px) {
+    .header h1 {
+        font-size: 34px;
+    }
+
+    .sidebar {
+        width: 133px;
+        top: 70px;
+        height: 100%;
+    }
+    .sidebar.collapsed {
+        width: 60px;
+        height: 100%;
+    }
+
+    .sidebar.collapsed .fas {
+        padding: 6px;
+    }
+
+    .sidebar a {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .content {
+        margin-left: 90px;
+        padding-top: 100px;
+    }
+    .content.collapsed {
+        margin-left: 60px;
+    }
+}
+.filter-container {
+    position: fixed;
+    display: inline-block;
+    top: 100px;
+    right: 20px;
+    z-index: 900;
+}
+
+.filter-container .filter-icon {
+    font-size: 24px;
+    color: #000000;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.filter-container .filter-icon:hover {
+    color: blue;
+}
+#submitRange {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 8px 16px; /* Reduced padding */
+    text-align: center; /* Center text horizontally */
+    text-decoration: none; /* No underline */
+    display: inline-block; /* Display as block */
+    font-size: 14px; /* Reduced font size */
+    margin-top: 10px; /* Top margin */
+    cursor: pointer; /* Cursor style */
+    border-radius: 5px; /* Rounded corners */
+}
+
+/* Hover effect */
+#submitRange:hover {
+    background-color: #0056b3; /* Darker blue */
+}
+
+/* Active effect */
+#submitRange:active {
+    background-color: #004389; /* Even darker blue */
+}
+.date-picker {
+    display: none;
+    position: fixed;
+    top: 120px;
+    right: 60px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.date-picker.active {
+    display: block;
+}
+
+.month-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.month-navigation i {
+    cursor: pointer;
+}
+
+.month-navigation i:hover{
+    color: blue;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    
+}
+
+.calendar-day {
+    text-align: center;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px; /* Adjust height as needed */
+    width: 20px; /* Ensure height and width are equal for perfect circles */
+    border-radius: 50%; /* Makes the element circular */
+    cursor: pointer; /* Add cursor pointer for interactive feel */
+    transition: background-color 0.3s ease; /* Optional: Smooth transition for background color */
+}
+
+.calendar-day.active {
+    background-color: blue;
+    color: #fff;
+}
+.calendar-day.selected-range {
+background-color: #007bff;
+color: #fff;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 280px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: transform 0.2s, background-color 0.8s; /* Combine transitions */
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    background-color: blue;
+}
+
+.card:hover .card-content,
+.card:hover .card-title,
+.card:hover .card-description {
+    color: white;
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 1.5em;
+    margin: 0;
+    color: #333;
+}
+
+.card-description {
+    font-size: 1.2em;
+    color: #000000;
+    margin-top: 10px;
+}
+.chart-container {
+    position: relative;
+    width: 50%;
+    height: 0;
+    padding-bottom: 30.25%; /* 16:9 aspect ratio */
+    display: flex;
+    padding-top: 5%; /* 16:9 aspect ratio */
+}
+
+
+/* Media query for responsive layout */
+@media (max-width: 560px) {
+    .header h1 {
+        font-size: 34px;
+    }
+    h1 {
+        font-size: 26px;
+    }
+    .header1 {
+        font-size: 24px;
+    }
+
+    .sidebar {
+        width: 133px;
+        top: 70px;
+    }
+    .sidebar.collapsed {
+        width: 60px;
+    }
+
+    .sidebar.collapsed .fas {
+        padding: 6px;
+    }
+
+    .sidebar a {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .content {
+        margin-left: 90px;
+        padding-top: 100px;
+    }
+    .content.collapsed {
+        margin-left: 60px;
+    }
+
+    .filter-container {
+        top: 100px;
+        right: 10px;
+    }
+
+    .date-picker {
+        top: 150px;
+        right: 10px;
+        max-width: 50%;
+    }
+
+    .calendar-days {
+        gap: 3px;
+    }
+
+    .calendar-day {
+        height: 15px;
+        width: 15px;
+    }
+
+    .card {
+        max-width: 80%; /* Adjust card width to fit smaller screens */
+    }
+
+    .chart-container {
+        width: 80%; /* Adjust chart container width to fit smaller screens */
+        padding-bottom: 80.25%; /* Adjust aspect ratio for responsiveness */
+        flex-direction: column;
+    }
+}
