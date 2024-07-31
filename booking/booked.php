@@ -157,7 +157,7 @@ ini_set('display_errors', 1);
 // Function to fetch and display orders
 function fetchOrders($mysqli, $user_id) {
     // Fetch orders from the database
-    $stmt = $mysqli->prepare("SELECT order_id, washer_id, vehicle_plate, total_price, Time, status FROM orders WHERE user_id = ?");
+    $stmt = $mysqli->prepare("SELECT order_id, washer_id, vehicle_plate, total_price,  payment_mode, phone_number, Time, status FROM orders WHERE user_id = ?");
     $stmt->bind_param("s", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -168,13 +168,15 @@ function fetchOrders($mysqli, $user_id) {
     } else {
         // Display orders
         echo "<table border='1'>";
-        echo "<tr><th>Order details</th><th>Washer Name</th><th>Vehicle Plate</th><th>Total Price</th><th>Booking Time</th><th>Status</th></tr>";
+        echo "<tr><th>Order details</th><th>Washer Name</th><th>Vehicle Plate</th><th>Total Price</th><th>Payment Mode</th><th>Phone Number</th><th>Booking Time</th><th>Status</th></tr>";
 
         while ($row = $result->fetch_assoc()) {
             $washerName = getWasherName($mysqli, $row['washer_id']);
             $vehiclePlate = $row['vehicle_plate']; // Assign vehicle plate here
+            $paymentMode = $row['payment_mode']; // Assign booking time here
+            $phoneNumber = $row['phone_number']; // Assign booking time here
             $BookingTime = $row['Time']; // Assign booking time here
-
+            
             // Clean and format status
             $status = trim(strtolower($row['status']));
 
@@ -183,6 +185,8 @@ function fetchOrders($mysqli, $user_id) {
             echo "<td>" . $washerName . "</td>";
             echo "<td>" . $vehiclePlate . "</td>";
             echo "<td>" . $row['total_price'] . "</td>";
+            echo "<td>" . $paymentMode . "</td>";
+            echo "<td>" . $phoneNumber . "</td>";
             echo "<td>" . $BookingTime . "</td>";
             echo "<td class='status-";
         

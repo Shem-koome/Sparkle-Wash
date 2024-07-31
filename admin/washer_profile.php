@@ -54,6 +54,20 @@ if (isset($_FILES['profile_picture'])) {
     }
 }
 
+// Assuming that 'id' in the `washers` table corresponds to 'username'
+$stmt = $mysqli->prepare('SELECT commission FROM washers WHERE name = ?');
+$stmt->bind_param('s', $username);  // Use 's' for string if username is a string
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows == 1) {
+    $row = $result->fetch_assoc();
+    $commission = $row['commission'];
+} else {
+    $commission = 'N/A';  // Change to something more informative
+}
+
+
 // Fetch user profile information including profile picture
 $query = "SELECT username, email, phone, gender, dob, user_type, profile_picture FROM logins WHERE username = ?";
 $stmt = $mysqli->prepare($query);
@@ -140,6 +154,7 @@ $stmt->close();
     <p><strong>Phone:</strong> <?php echo htmlspecialchars($phone); ?></p>
     <p><strong>Gender:</strong> <?php echo ucfirst(htmlspecialchars($gender)); ?></p>
     <p><strong>Date of Birth:</strong> <?php echo htmlspecialchars($dob); ?></p>
+    <p><strong>Commission:</strong> <?php echo htmlspecialchars($commission); ?>%</p>
     <p><strong>User Type:</strong> <span class="user-type"><?php echo ucfirst(htmlspecialchars($user_type)); ?></span></p>
 </div>
 

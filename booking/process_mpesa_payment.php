@@ -5,8 +5,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $amount = $_POST['totalPrice'];
         $phone = $_POST['phoneNumber'];
 
-        // Validate PhoneNumber format (example: 2547XXXXXXXX)
-        if (!preg_match('/^2547\d{8}$/', $phoneNumber)) {
+        // Validate and round the amount to the nearest whole number
+        if (!is_numeric($amount) || floatval($amount) <= 0) {
+            $logMessage = 'Invalid Amount format';
+            echo json_encode(['status' => 'error', 'message' => $logMessage]);
+            echo "<script>console.error('" . addslashes($logMessage) . "');</script>";
+            exit;
+        }
+
+        $amount = round(floatval($amount)); // Round the amount to the nearest whole number
+
+        // Normalize and validate PhoneNumber
+        $phone = preg_replace('/\D/', '', $phone); // Remove non-numeric characters
+        if (strlen($phone) == 10 && substr($phone, 0, 1) == '0') {
+            $phone = '254' . substr($phone, 1); // Convert local number to international format
+        } elseif (strlen($phone) == 12 && substr($phone, 0, 3) == '254') {
+            // It's already in international format
+        } else {
             $logMessage = 'Invalid PhoneNumber format';
             echo json_encode(['status' => 'error', 'message' => $logMessage]);
             echo "<script>console.error('" . addslashes($logMessage) . "');</script>";
@@ -51,7 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Payment request URL
                 $payment_url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
-                
 
                 // Prepare request data
                 $timestamp = date('YmdHis');
@@ -62,10 +76,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'Password' => $password,
                     'Timestamp' => $timestamp,
                     'TransactionType' => 'CustomerPayBillOnline',
-                    'Amount' => $totalPrice,
-                    'PartyA' => $phoneNumber,
+                    'Amount' => $amount,
+                    'PartyA' => $phone,
                     'PartyB' => $shortcode,
-                    'PhoneNumber' => $phoneNumber,
+                    'PhoneNumber' => $phone,
                     'CallBackURL' => "https://mydomain.com/path", // Replace with your callback URL
                     'AccountReference' => 'SparkleWash', // Replace with your transaction reference
                     'TransactionDesc' => 'Payment for services'

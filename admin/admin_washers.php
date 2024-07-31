@@ -59,9 +59,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fetch washers from the database
-$stmt = $pdo->query('SELECT * FROM washers');
+$stmt = $pdo->query('SELECT id, name, image, commission, cars_washed, total_income FROM washers');
 $washers = $stmt->fetchAll();
+
+// Calculate total income
+$totalIncome = array_sum(array_column($washers, 'total_income'));
 ?>
+
 <?php include 'dash.php' ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -82,6 +86,38 @@ $washers = $stmt->fetchAll();
     <div class="container mt-5">
         <h2>Manage Washers</h2>
         
+        <!-- Washer Table -->
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Commission (%)</th>
+                        <th>Cars Washed </th>
+                        <th>Total commision </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($washers as $washer): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($washer['id']) ?></td>
+                            <td><?= htmlspecialchars($washer['name']) ?></td>
+                            <td><?= htmlspecialchars($washer['commission']) ?>%</td>
+                            <td><?= htmlspecialchars($washer['cars_washed']) ?></td>
+                            <td><?= htmlspecialchars($washer['total_income']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-right font-weight-bold">Total commision given</td>
+                        <td><?= number_format($totalIncome, 2) ?></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
         <!-- Button to show the add washer form -->
         <button class="btn btn-primary mb-4" id="show-add-form-button">Add Washer</button>
 
@@ -154,9 +190,12 @@ $washers = $stmt->fetchAll();
                 input.style.display = 'none';
 
                 input.addEventListener('change', function() {
-                    if (this.files.length > 0) {
-                        const file = this.files[0];
-                        document.getElementById('image').value = '../img/' + file.name; // Adjust path as needed
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('image').value = e.target.result;
+                        }
+                        reader.readAsDataURL(this.files[0]);
                     }
                 });
 
@@ -166,34 +205,27 @@ $washers = $stmt->fetchAll();
             });
         });
 
-        // Show the add washer form when the "Add Washer" button is clicked
+        // Show the add washer form when the button is clicked
         document.getElementById('show-add-form-button').addEventListener('click', function() {
             document.getElementById('add-washer-form').style.display = 'block';
             this.style.display = 'none';
         });
 
-        // Hide the add washer form after submission
-        document.getElementById('add-washer-form').addEventListener('submit', function() {
-            this.style.display = 'none';
-            document.getElementById('show-add-form-button').style.display = 'block';
-        });
+        // Display alerts
+        const urlParams = new URLSearchParams(window.location.search);
+        const washerAdded = urlParams.get('washer_added');
+        const washerUpdated = urlParams.get('washer_updated');
+        const washerRemoved = urlParams.get('washer_removed');
+        const washerName = urlParams.get('name');
 
-        // Show alert if washer was added successfully
-        <?php if (isset($_GET['washer_added']) && $_GET['washer_added'] == 1 && isset($_GET['name'])): ?>
-        showAlert('<?= htmlspecialchars($_GET['name']) ?> added successfully!', 'success');
-        <?php endif; ?>
+        if (washerAdded === '1') {
+            showAlert('Washer "' + washerName + '" added successfully!', 'success');
+        } else if (washerUpdated === '1') {
+            showAlert('Washer with ID ' + urlParams.get('id') + ' updated successfully!', 'success');
+        } else if (washerRemoved === '1') {
+            showAlert('Washer "' + washerName + '" removed successfully!', 'danger');
+        }
 
-        // Show alert if washer was updated successfully
-        <?php if (isset($_GET['washer_updated']) && $_GET['washer_updated'] == 1 && isset($_GET['id'])): ?>
-        showAlert('Washer commission updated successfully!', 'info');
-        <?php endif; ?>
-
-        // Show alert if washer was removed successfully
-        <?php if (isset($_GET['washer_removed']) && $_GET['washer_removed'] == 1 && isset($_GET['name'])): ?>
-        showAlert('<?= htmlspecialchars($_GET['name']) ?> removed successfully!', 'danger');
-        <?php endif; ?>
-
-        // Function to show alert
         function showAlert(message, type) {
             const alertPlaceholder = document.getElementById('alert-placeholder');
             const alert = document.createElement('div');
@@ -206,17 +238,11 @@ $washers = $stmt->fetchAll();
                 </button>
             `;
             alertPlaceholder.appendChild(alert);
-
             setTimeout(() => {
-                alert.classList.remove('show');
-                alert.addEventListener('transitionend', () => {
-                    alert.remove();
-                });
-            }, 3000);
+                $(alert).alert('close');
+            }, 5000);
         }
     </script>
-
 </div>
-<script src="../js/admin.js"></script>
 </body>
 </html>

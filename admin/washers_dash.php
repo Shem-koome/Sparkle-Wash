@@ -24,6 +24,19 @@ if ($result->num_rows == 1) {
     exit;
 }
 
+// Fetch the number of cars washed from the database
+$stmt = $mysqli->prepare('SELECT cars_washed FROM washers WHERE id = ?');
+$stmt->bind_param('i', $washer_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows == 1) {
+    $row = $result->fetch_assoc();
+    $carsWashed = $row['cars_washed'];
+} else {
+    $carsWashed = 0;
+}
+
 // Query to calculate total commission earned by the washer
 $stmtCommission = $mysqli->prepare('SELECT SUM(commission) AS total_commission FROM order_details WHERE washer_id = ?');
 $stmtCommission->bind_param('i', $washer_id);
@@ -123,7 +136,6 @@ $mysqli->close();
         background-color: #28a745; /* green */
         color: white;
     }
- 
 
     /* Responsive Design */
     @media (max-width: 768px) {
@@ -144,6 +156,12 @@ $mysqli->close();
             <div class="card-content">
                 <h2 class="card-title">Income</h2>
                 <p class="card-description" id="income"><?php echo number_format($totalCommission, 2); ?></p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <h2 class="card-title">Cars Washed</h2>
+                <p class="card-description" id="income"><?php echo number_format($carsWashed, 2); ?></p>
             </div>
         </div>
     </div>
@@ -182,11 +200,10 @@ $mysqli->close();
     // Check if there are any orders
     if ($result->num_rows > 0) {
         echo '<table class="table table-striped">';
-        echo '<thead><tr><th>Order ID</th><th>Date</th><th>Vehicle Plate</th><th>Status</th><th>Action</th></tr></thead>';
+        echo '<thead><tr><th>Date</th><th>Vehicle Plate</th><th>Status</th><th>Action</th></tr></thead>';
         echo '<tbody>';
         while ($order = $result->fetch_assoc()) {
             echo '<tr>';
-            echo '<td>' . htmlspecialchars($order['order_id']) . '</td>';
             echo '<td>' . htmlspecialchars($order['date']) . '</td>';
             echo '<td>' . htmlspecialchars($order['vehicle_plate']) . '</td>';
             echo '<td>';
@@ -225,7 +242,6 @@ $mysqli->close();
         echo "<tr><th>Services Needed</th>
         <th>Commission</th>
         </tr>";
-        
 
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";

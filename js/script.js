@@ -205,91 +205,94 @@ document.addEventListener('DOMContentLoaded', (event) => {
             
             // Get the payment mode by checking each radio button id
             let paymentMode = '';
-            let phoneNumber = ''; // Initialize phone number variable
-            if ($('#payment-cash').is(':checked')) {
-                paymentMode = $('#payment-cash').val();
-            } else if ($('#payment-mpesa').is(':checked')) {
-                paymentMode = $('#payment-mpesa').val();
-                phoneNumber = $('#phoneNumber').val(); // Get the phone number if MPesa is selected
-            }
-            
-            const totalPrice = $('#total-price').text();
-            
-            let services = [];
-            
-            $('#cart-items tbody tr').each(function(index, row) {
-                const serviceName = $(row).find('.service').text();   
-                const servicePrice = parseFloat($(row).find('.item-total').text().replace('$', ''));  
-            
-                services.push({
-                    name: serviceName,
-                    price: servicePrice
-                });
-            });
-            
-            if (!selectedWasher) {
-                showAlert('Please assign a washer.', 'danger');
-                return;
-            }
-            
-            if (!date) {
-                showAlert('Please select a date.', 'danger');
-                return;
-            }
-            
-            if (!location) {
-                showAlert('Please select a location.', 'danger');
-                return;
-            }
-            
-            if (!vehiclePlate) {
-                showAlert('Please enter a valid vehicle plate.', 'danger');
-                return;
-            }
-            
-            if (!paymentMode) {
-                showAlert('Please select mode of payment.', 'danger');
-                return;
-            }
-            
-            if (paymentMode === 'mpesa') {
-                const phonePattern = /^\+254[7-9]\d{8}$/;
-        
-                if (!phoneNumber) {
-                    showAlert('Please enter your phone number.', 'danger');
-                    return;
-                }
-        
-                if (!phonePattern.test(phoneNumber)) {
-                    showAlert('Please enter a valid phone number starting with +254 and followed by 9 digits.', 'danger');
-                    return;
-                }
-            }
-            
-            $.ajax({
-                url: '../booking/checkout.php',
-                method: 'POST',
-                data: {
-                    washerId: selectedWasher,
-                    washerName: washerName,
-                    date: date,
-                    location: location,
-                    vehiclePlate: vehiclePlate,
-                    paymentMode: paymentMode,
-                    phoneNumber: phoneNumber, // Send phone number only if MPesa is selected
-                    totalPrice: totalPrice,
-                    services: JSON.stringify(services)
-                },
-                success: function(response) {
-                    showAlert('Booked Services successfully!', 'success');
-                    localStorage.removeItem('cart');
-                    updateCart();
-                    $('#assignModal').modal('hide');
-                },
-                error: function(error) {
-                    showAlert('Error during checkout. Please try again.', 'danger');
-                }
-            });
+            // Initialize phone number variable
+let phoneNumber = '';
+if ($('#payment-cash').is(':checked')) {
+    paymentMode = $('#payment-cash').val();
+} else if ($('#payment-mpesa').is(':checked')) {
+    paymentMode = $('#payment-mpesa').val();
+    phoneNumber = $('#phoneNumber').val(); // Get the phone number if MPesa is selected
+}
+
+const totalPrice = $('#total-price').text();
+
+let services = [];
+
+$('#cart-items tbody tr').each(function(index, row) {
+    const serviceName = $(row).find('.service').text();
+    const servicePrice = parseFloat($(row).find('.item-total').text().replace('$', ''));
+
+    services.push({
+        name: serviceName,
+        price: servicePrice
+    });
+});
+
+if (!selectedWasher) {
+    showAlert('Please assign a washer.', 'danger');
+    return;
+}
+
+if (!date) {
+    showAlert('Please select a date.', 'danger');
+    return;
+}
+
+if (!location) {
+    showAlert('Please select a location.', 'danger');
+    return;
+}
+
+if (!vehiclePlate) {
+    showAlert('Please enter a valid vehicle plate.', 'danger');
+    return;
+}
+
+if (!paymentMode) {
+    showAlert('Please select mode of payment.', 'danger');
+    return;
+}
+
+if (paymentMode === 'mpesa') {
+    // Create a RegExp object for phone number validation
+    // Matches local numbers (07XXXXXXXX or 01XXXXXXXX) and international numbers (2547XXXXXXXX)
+    const phonePattern = /^(07\d{8}|01\d{8}|2547\d{8})$/;
+
+    if (!phoneNumber) {
+        showAlert('Please enter your phone number.', 'danger');
+        return;
+    }
+
+    if (!phonePattern.test(phoneNumber)) {
+        showAlert('Please enter a valid phone number. It should start with 07, 01, or 254 followed by 9 digits.', 'danger');
+        return;
+    }
+}
+
+$.ajax({
+    url: '../booking/checkout.php',
+    method: 'POST',
+    data: {
+        washerId: selectedWasher,
+        washerName: washerName,
+        date: date,
+        location: location,
+        vehiclePlate: vehiclePlate,
+        paymentMode: paymentMode,
+        phoneNumber: phoneNumber, // Send phone number only if MPesa is selected
+        totalPrice: totalPrice,
+        services: JSON.stringify(services)
+    },
+    success: function(response) {
+        showAlert('Booked Services successfully!', 'success');
+        localStorage.removeItem('cart');
+        updateCart();
+        $('#assignModal').modal('hide');
+    },
+    error: function(error) {
+        showAlert('Error during checkout. Please try again.', 'danger');
+    }
+});
         });        
     });
 });

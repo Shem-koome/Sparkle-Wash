@@ -224,46 +224,30 @@
             MPesa
         </label>
     </div>
-    <div id="mpesa-form" style="display: none;"> <!-- Initially hidden -->
-        <?php 
-        include'../auth/config.php';
-        // include'session.php';
-        $totalPrice = 0.00; // Initialize total price
-        echo '<!-- Total Price: ', $totalPrice, ' -->';
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Assuming amount and phone are posted from the form
-            $amount = $_POST['totalPrice'];
-            $phone = $_POST['phoneNumber'];
-            
-            // Further processing of amount and phone number...
-        }
-        ?>
-        <body oncontextmenu="return false" class="snippet-body">
-        <div class="container d-flex justify-content-center">
-          <div class="card mt-5 px-3 py-4">
+    <div class="mt-4" id="mpesa-form" style="display: none;"> <!-- Initially hidden -->
+    <div class="container d-flex justify-content-center">
+        <div class="card mt-5 px-3 py-4">
             <div class="media mt-4 pl-2">
-              <img src="../img/mpesa.png" class="mr-3" height="75" />
+                <img src="../img/mpesa.png" class="mr-3" height="75" />
             </div>
             <div class="media mt-3 pl-2">
-                <!--bs5 input-->
-                <form class="row g-3" action="process_mpesa_payment.php" method="POST">
+                <!-- bs5 input -->
+                <form class="row g-3" action="../booking/checkout.php" method="POST">
                     <div class="col-12">
-                      <label for="inputAddress" class="form-label">Amount</label>
-                      <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="<?php echo $totalPrice; ?>" readonly>
+                        <label for="totalPrice" class="form-label">Amount</label>
+                        <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="0.00" readonly>
                     </div>
                     <div class="col-12">
-                      <label for="inputAddress2" class="form-label" >Phone Number</label>
-                      <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"  placeholder="Enter Phone Number">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Enter your Phone Number" required>
                     </div>
-                  </form>
-                  <!--bs5 input-->
-              </div>
+                </form>
+                <!-- bs5 input -->
             </div>
-          </div>
         </div>
     </div>
 </div>
+
                   <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="checkout-button">Checkout</button>
                 </div>
@@ -273,7 +257,6 @@
     </div>
     </div>
     <script>
-
 document.addEventListener('DOMContentLoaded', function() {
     // Function to update the MPesa amount field
     function updateMpesaAmount() {
