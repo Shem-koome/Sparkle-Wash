@@ -244,5 +244,6 @@ $totalIncome = array_sum(array_column($washers, 'total_income'));
         }
     </script>
 </div>
+<script src="../js/admin.js"></script>
 </body>
 </html>
