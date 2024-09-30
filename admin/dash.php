@@ -109,6 +109,7 @@ $unreadCount = isset($_SESSION['unreadNotifications']) ? $_SESSION['unreadNotifi
     <a href="admin_bookings.php" class="nav-link"><i class="fas fa-calendar-check"></i><span class="sidebar-text">Bookings</span></a>
     <a href="admin_washers.php" class="nav-link"><i class="fas fa-users"></i><span class="sidebar-text">Washers</span></a>
     <a href="admin_services.php" class="nav-link"><i class="fas fa-tools"></i><span class="sidebar-text">Services</span></a>
+    <a href="admin_parking.php" class="nav-link"><i class="fas fa-parking"></i><span class="sidebar-text">Parking</span></a>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {

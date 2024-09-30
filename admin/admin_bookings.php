@@ -1,4 +1,4 @@
-<?php include 'dash.php'; ?>
+<?php include 'dash.php';?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,9 +12,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.js"></script>
     <script src="charts.js"></script>
-  
 </head>
 <style>
+    /* Existing CSS */
     .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -143,132 +143,158 @@ tr:hover {
 }
 </style>
 <body>
-
-
-
     <div id="alert-placeholder"></div>
     <div class="content" id="content">
-   
-           
-    <?php
-include('../auth/config.php');
+        <?php
+        include('../auth/config.php');
 
+        // Fetch orders from the database
+        $query = "SELECT order_id, user_id, washer_id, date, location, vehicle_plate, total_price AS order_total, status AS order_status, Time AS booking_time
+                  FROM orders
+                  ORDER BY order_id DESC"; // Assuming you want to display most recent orders first
 
-// Fetch orders from the database
-$query = "SELECT order_id, user_id, washer_id, date, location, vehicle_plate, total_price AS order_total, status AS order_status, Time AS booking_time
-          FROM orders
-          ORDER BY order_id DESC"; // Assuming you want to display most recent orders first
+        $result = $mysqli->query($query);
 
-$result = $mysqli->query($query);
+        if ($result->num_rows === 0) {
+            echo "<p>No orders found.</p>";
+        } else {
+            echo "<h2>All Bookings Information</h2>";
 
-if ($result->num_rows === 0) {
-    echo "<p>No orders found.</p>";
-} else {
-    echo "<h2>All Bookings Information</h2>";
+            while ($row = $result->fetch_assoc()) {
+                echo "<h3>Order ID: " . $row['order_id'] . "</h3>";
+                echo "<table class='order-table' border='1'>";
+                echo "<tr>
+                        <th>Client's name</th>
+                        <th>Booking Date</th>
+                        <th>Location</th>
+                        <th>Vehicle Plate</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>State</th>
+                        <th>Booking Time</th>
+                        <th>Action</th>
+                      </tr>";
 
-    while ($row = $result->fetch_assoc()) {
-        echo "<h3>Order ID: " . $row['order_id'] . "</h3>";
-        echo "<table class='order-table' border='1'>";
-        echo "<tr>
-                <th>Client's name</th>
-                <th>Booking Date</th>
-                <th>Location</th>
-                <th>Vehicle Plate</th>
-                <th>Total Price</th>
-                <th>Status</th>
-                <th>Booking Time</th>
-                <th>Action</th>
-              </tr>";
-
-        echo "<tr>";
-        echo "<td>" . $row['user_id'] . "</td>";
-        echo "<td>" . $row['date'] . "</td>";
-        echo "<td>" . $row['location'] . "</td>";
-        echo "<td>" . $row['vehicle_plate'] . "</td>";
-        echo "<td>" . $row['order_total'] . "</td>";
-        echo "<td class='status-";
-        
-        switch ($row['order_status']) {
-            case 'pending':
-                echo "pending'>Pending";
-                break;
-            case 'in progress':
-                echo "in-progress'>In Progress";
-                break;
-            case 'completed':
-                echo "completed'>Completed";
-                break;
-            default:
-                echo "unknown'>Unknown";
-                break;
-        }
-        
-        echo "</td>";
-        echo "<td>" . $row['booking_time'] . "</td>";
-        echo "<td><button class='order-details-btn' data-order-id='" . $row['order_id'] . "'>Order Details</button></td>";
-        echo "</tr>";
-
-        echo "<tr class='order-details-row' id='order-details-" . $row['order_id'] . "' style='display: none;'>";
-        echo "<td colspan='9'>";
-        fetchOrderDetails($mysqli, $row['order_id']); // Function call to fetch and display order details
-        echo "</td>";
-        echo "</tr>";
-
-        echo "</table>";
-        echo "<br>";
-    }
-}
-
-$mysqli->close();
-
-// Function to fetch and display order details
-function fetchOrderDetails($mysqli, $order_id) {
-    $stmt = $mysqli->prepare("SELECT washer_name, service_name, service_price FROM order_details WHERE order_id = ?");
-    $stmt->bind_param("i", $order_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    echo "<table class='order-details-table' border='1'>";
-    echo "<tr><th>Washer Name</th><th>Service Name</th><th>Service Price</th></tr>";
-
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $row['washer_name'] . "</td>";
-        echo "<td>" . $row['service_name'] . "</td>";
-        echo "<td>" . $row['service_price'] . "</td>";
-        echo "</tr>";
-    }
-
-    echo "</table>";
-
-    $stmt->close();
-}
-?>
-
-<script>
-    // JavaScript to toggle visibility of order details on button click
-    document.addEventListener("DOMContentLoaded", function() {
-        const orderDetailsBtns = document.querySelectorAll('.order-details-btn');
-
-        orderDetailsBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const orderId = this.getAttribute('data-order-id');
-                const orderDetailsRow = document.getElementById('order-details-' + orderId);
-
-                if (orderDetailsRow.style.display === 'none') {
-                    orderDetailsRow.style.display = 'table-row';
-                } else {
-                    orderDetailsRow.style.display = 'none';
+                echo "<tr>";
+                echo "<td>" . $row['user_id'] . "</td>";
+                echo "<td>" . $row['date'] . "</td>";
+                echo "<td>" . $row['location'] . "</td>";
+                echo "<td>" . $row['vehicle_plate'] . "</td>";
+                echo "<td>" . $row['order_total'] . "</td>";
+                echo "<td class='status-";
+                
+                switch ($row['order_status']) {
+                    case 'pending':
+                        echo "pending'>Pending";
+                        break;
+                    case 'in progress':
+                        echo "in-progress'>In Progress";
+                        break;
+                    case 'completed':
+                        echo "completed'>Completed";
+                        break;
+                    default:
+                        echo "unknown'>Unknown";
+                        break;
                 }
+                
+                echo "</td>";
+                echo '<td>';
+                echo '<select class="status-dropdown" data-order-id="' . $row['order_id'] . '">';
+                echo '<option value="pending"' . ($row['order_status'] == 'pending' ? ' selected' : '') . '>Pending</option>';
+                echo '<option value="in progress"' . ($row['order_status'] == 'in progress' ? ' selected' : '') . '>In Progress</option>';
+                echo '<option value="completed"' . ($row['order_status'] == 'completed' ? ' selected' : '') . '>Completed</option>';
+                echo '</select>';
+                echo '</td>';
+                echo "<td>" . $row['booking_time'] . "</td>";
+                echo "<td><button class='order-details-btn' data-order-id='" . $row['order_id'] . "'>Order Details</button></td>";
+                echo "</tr>";
+
+                echo "<tr class='order-details-row' id='order-details-" . $row['order_id'] . "' style='display: none;'>";
+                echo "<td colspan='9'>";
+                fetchOrderDetails($mysqli, $row['order_id']); // Function call to fetch and display order details
+                echo "</td>";
+                echo "</tr>";
+
+                echo "</table>";
+                echo "<br>";
+            }
+        }
+
+        $mysqli->close();
+
+        // Function to fetch and display order details
+        function fetchOrderDetails($mysqli, $order_id) {
+            $stmt = $mysqli->prepare("SELECT washer_name, service_name, service_price FROM order_details WHERE order_id = ?");
+            $stmt->bind_param("i", $order_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            echo "<table class='order-details-table' border='1'>";
+            echo "<tr><th>Washer Name</th><th>Service Name</th><th>Service Price</th></tr>";
+
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . $row['washer_name'] . "</td>";
+                echo "<td>" . $row['service_name'] . "</td>";
+                echo "<td>" . $row['service_price'] . "</td>";
+                echo "</tr>";
+            }
+
+            echo "</table>";
+
+            $stmt->close();
+        }
+        ?>
+
+        <script>
+            // JavaScript to toggle visibility of order details on button click
+            document.addEventListener("DOMContentLoaded", function() {
+                const orderDetailsBtns = document.querySelectorAll('.order-details-btn');
+
+                orderDetailsBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const orderId = this.getAttribute('data-order-id');
+                        const orderDetailsRow = document.getElementById('order-details-' + orderId);
+
+                        if (orderDetailsRow.style.display === 'none') {
+                            orderDetailsRow.style.display = 'table-row';
+                        } else {
+                            orderDetailsRow.style.display = 'none';
+                        }
+                    });
+                });
+
+                // Event listener for status dropdown change
+                const statusDropdowns = document.querySelectorAll('.status-dropdown');
+                
+                statusDropdowns.forEach(dropdown => {
+                    dropdown.addEventListener('change', function() {
+                        const orderId = this.getAttribute('data-order-id');
+                        const newStatus = this.value;
+
+                        // AJAX request to update order status
+                        $.ajax({
+                            url: 'status_update.php',
+                            type: 'POST',
+                            data: {
+                                order_id: orderId,
+                                status: newStatus
+                            },
+                            success: function(response) {
+                                // Handle success (optional)
+                                showAlert('Status updated successfully!', 'success');
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle error (optional)
+                                console.error('Error updating status:', status, error);
+                            }
+                        });
+                    });
+                });
             });
-        });
-    });
-</script>
-
-
+        </script>
     </div>
-    
-
+    <script src="../js/admin.js"></script>
 </body>
-<script src="../js/admin.js"></script>
 </html>

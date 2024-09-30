@@ -45,7 +45,7 @@ table {
 
 th, td {
     padding: 12px 15px;
-    border: 1px solid #ddd;
+    border: none;
     text-align: left;
 }
 
@@ -56,10 +56,6 @@ th {
 
 td {
     background-color: #f9f9f9;
-}
-
-tr:nth-child(even) td {
-    background-color: #e9e9e9;
 }
 
 a {
@@ -101,6 +97,48 @@ a {
     color: white;
 }
 
+
+/* Ensure the modal body stretches to fill available space */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* General styling for all <p> elements in the modal */
+.modal-body p {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif; /* Sets a readable font */
+}
+
+/* Styling for the "Total Price" <p> element */
+.total-price {
+    text-align: center;
+    font-size: 1.5em; /* Larger font size */
+    font-weight: bold; /* Make the font bold */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: black;
+}
+
+/* Styling for the "Washer" <p> element */
+.washer-name {
+    text-align: left;
+    font-size: 1em; /* Standard font size */
+    font-style: italic; /* Italicize the font */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Styling for the "Served by" <p> element */
+.served-by {
+    text-align: left;
+    font-size: 1em; /* Standard font size */
+    color: #555; /* Slightly lighter color for less emphasis */
+    margin-top: auto; /* Push it to the bottom of the modal */
+    bottom: 1px;
+}
 </style>
 
 
@@ -168,7 +206,7 @@ function fetchOrders($mysqli, $user_id) {
     } else {
         // Display orders
         echo "<table border='1'>";
-        echo "<tr><th>Order details</th><th>Washer Name</th><th>Vehicle Plate</th><th>Total Price</th><th>Payment Mode</th><th>Phone Number</th><th>Booking Time</th><th>Status</th></tr>";
+        echo "<tr><th>Order details</th><th>Washer Name</th><th>Vehicle Plate</th><th>Total Price</th><th>Payment Mode</th><th>Phone Number</th><th>Booking Time</th><th>Status</th><th>Print Receipt</th></tr>";
 
         while ($row = $result->fetch_assoc()) {
             $washerName = getWasherName($mysqli, $row['washer_id']);
@@ -206,6 +244,8 @@ function fetchOrders($mysqli, $user_id) {
             }
             
             echo "</td>";
+            echo "<td><button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#receiptModal' 
+            data-order-id='" . $row['order_id'] . "'>Print Receipt</button></td>";
 
             echo "</tr>";
         }
@@ -235,7 +275,8 @@ function fetchOrderDetails($mysqli, $order_id) {
     $result = $stmt->get_result();
 
     // Display order details
-    echo "<h5>Order Details for Order ID: $order_id</h5>";
+    //echo "<h5>Order Details for Order ID: $order_id</h5>";
+    echo "<h5>Order Details for your order</h5>";
     echo "<table border='1'>";
     echo "<tr><th>Washer Name</th><th>Service Name</th><th>Service Price</th></tr>";
 
@@ -263,8 +304,72 @@ if (isset($_GET['order_id'])) {
 $mysqli->close();
 ?>
 
-</section>
+<!-- Receipt Modal -->
+<div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="receiptModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="receiptModalBody">
+        <center><h1 class="text-primary display-4">Sparkle Wash</h1></center>
+        <table border="1" style="width: 100%;">
+          <thead>
+            <tr>
+              <th style="text-align: left;">Service</th>
+              <th style="text-align: left;">Price</th>
+            </tr>
+          </thead>
+          <tbody id="receiptTableBody">
+            <!-- Rows will be added here dynamically -->
+          </tbody>
+        </table>
+        <p style="text-align: center; margin-top: 10px;" class="total-price">Total Price: </p>
+        <p style="text-align: left; margin-top: 10px;" class="washer-name">Washer: </p>
+        <br>
+        <p style="text-align: left;">You were served by: <?php echo htmlspecialchars($_SESSION['username']); ?></p>
+        <p id="receiptDateTime" style="text-align: left; margin-bottom: 10px;"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="printReceipt()">Print</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<script>
+   function printReceipt() {
+    // Get the current date and time
+    const now = new Date();
+    const formattedDateTime = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+
+    // Update the receipt date and time
+    document.getElementById('receiptDateTime').innerText = 'Date: ' + formattedDateTime;
+
+    // Get the modal body content
+    const modalBody = document.getElementById('receiptModalBody').innerHTML;
+
+    // Create a new window for printing
+    const printWindow = window.open('', '', 'height=600,width=800');
+
+    // Write the modal content into the new window
+    printWindow.document.write('<html><head><title></title>');
+    printWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">'); // Bootstrap CSS for styling
+    printWindow.document.write('</head><body >');
+    printWindow.document.write(modalBody);
+    printWindow.document.write('</body></html>');
+
+    // Close the document and trigger print dialog
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+}
+
+</script>
+
+</section>
 
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>

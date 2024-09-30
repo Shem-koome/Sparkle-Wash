@@ -191,6 +191,7 @@ echo "<script>console.log('Your profile picture is: " . htmlspecialchars($profil
                                 <a href="../about/testimonial.php" class="dropdown-item">Testimonial</a>
                             </div>
                         </div>
+                        <a href="../about/parking.php" class="nav-item nav-link">Parking</a>
                         <a href="../about/contact.php" class="nav-item nav-link">Contact Us</a>
                     </div>
 

@@ -296,3 +296,38 @@ $.ajax({
         });        
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    var receiptModal = document.getElementById('receiptModal');
+    receiptModal.addEventListener('show.bs.modal', function(event) {
+        var button = event.relatedTarget;
+        var orderId = button.getAttribute('data-order-id');
+
+        // Make an AJAX call to fetch order details based on orderId
+        $.ajax({
+            url: '../booking/receipt.php',
+            method: 'GET',
+            data: { order_id: orderId },
+            success: function(response) {
+                console.log(response);  // Check the structure of the response
+
+                if (response && Array.isArray(response.details)) {
+                    // Populate the modal with the fetched data
+                    $('#receiptTableBody').empty();
+                    response.details.forEach(function(detail) {
+                        $('#receiptTableBody').append('<tr><td>' + detail.service_name + '</td><td>' + detail.service_price + '</td></tr>');
+                    });
+
+                    $('#receiptModalBody').find('.total-price').text('Total Price: ' + response.total_price);
+                    $('#receiptModalBody').find('.washer-name').text('Washer: ' + response.washer_name);
+                } else {
+                    console.log('No data received or data format is incorrect.');
+                }
+            },
+            error: function(error) {
+                console.log('Error fetching order details:', error);
+            }
+        });
+    });
+});
+
